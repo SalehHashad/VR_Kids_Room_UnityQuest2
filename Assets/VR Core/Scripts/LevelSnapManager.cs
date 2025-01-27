@@ -1,8 +1,11 @@
+﻿using ArabicSupport;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem.iOS;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -11,14 +14,20 @@ public class LevelSnapManager : MonoBehaviour
 {
     [Header("Audio Settings")]
     [SerializeField] private AudioSource audioSource;
-    [SerializeField] private AudioClip successAudioClip;
-    [SerializeField] private AudioClip failedAudioClip;
-    [SerializeField] private AudioClip PassAudioClip;
+    [SerializeField] private AudioClip englishSuccessAudioClip;
+    [SerializeField] private AudioClip arabicSuccessAudioClip;
+    [SerializeField] private AudioClip englishFailedAudioClip;
+    [SerializeField] private AudioClip arabicFailedAudioClip;
+    [SerializeField] private AudioClip englishPassAudioClip;
+    [SerializeField] private AudioClip arabicPassAudioClip;
+    [SerializeField] private AudioClip englishInstructions;
+    [SerializeField] private AudioClip arabicInstructions;
 
     [Header("Score Settings")]
     [SerializeField] private int totalScore = 0;
     [SerializeField] private int requiredScore = 0;
     [SerializeField] private TextMeshProUGUI ScoreTMP;
+    [SerializeField] private TextMeshProUGUI ScreenScoreTMP;
     [SerializeField] List<ModelsData> modelsData = new List<ModelsData>();
 
     [Header("Image View Settings")]
@@ -32,6 +41,12 @@ public class LevelSnapManager : MonoBehaviour
     private ShowImage_Tag showImage;
     private ScoreButton_Tag showScoreButton;
 
+    [Space]
+    [Header("Next Level")]
+    public int WaitingForNextLevelPerSeconds = 5;
+    public GameObject nextLevelPanel;
+    public TextMeshProUGUI nextLevelInSecondsTMP;
+    [Space]
     public UnityEvent onLevelComplete;
     public UnityEvent<int> onScoreUpdated;
 
@@ -60,26 +75,26 @@ public class LevelSnapManager : MonoBehaviour
     private void InitializeLevelSettings()
     {
         int currentLevel = SceneManager.GetActiveScene().buildIndex;
-
         switch (currentLevel)
         {
-            case 0:
+            case 1:
+                PlayGameInstractions();
                 requiredScore = 6;
                 remainingViews = 4;
                 viewDuration = 10f;
                 break;
-            case 1:
+            case 2:
                 // here you can also add the audio intro for theis level like "This is level two you need to grab 24 object and so on ..."
                 requiredScore = 18;
                 remainingViews = 3;
                 viewDuration = 8f;
                 break;
-            case 2:
+            case 3:
                 requiredScore = 27;
                 remainingViews = 2;
                 viewDuration = 6f;
                 break;
-            case 3:
+            case 4:
                 requiredScore = 51;
                 remainingViews = 1;
                 viewDuration = 5f;
@@ -90,6 +105,16 @@ public class LevelSnapManager : MonoBehaviour
                 viewDuration = 0f;
                 break;
         }
+        UpdateScoreUI();
+    }
+
+    private void PlayGameInstractions()
+    {
+        if (GameManager.instance.IsArabicApp())
+            audioSource.clip = arabicInstructions;
+        else
+            audioSource.clip = englishInstructions;
+        audioSource.Play();
     }
 
     public void ShowReferenceImage()
@@ -132,6 +157,24 @@ public class LevelSnapManager : MonoBehaviour
             viewsRemainingText.text = $"Remaining Views: {remainingViews}";
         }
     }
+    [ContextMenu("Make Correct Answer")]
+    public void testCorrctAnswer()
+    {
+        if (englishSuccessAudioClip != null && audioSource != null)
+        {
+            if(!GameManager.instance.IsArabicApp())
+                audioSource.PlayOneShot(englishSuccessAudioClip);
+            else
+                audioSource.PlayOneShot(arabicSuccessAudioClip);
+        }
+
+        totalScore += 1;
+        //snapPoint.IsMatched = true;
+        onScoreUpdated?.Invoke(totalScore);
+        UpdateScoreUI();
+        Debug.Log("Your score is : " + totalScore);
+        CheckLevelCompletion();
+    }
 
     public void HandleCorrectSnap(string objectTag)
     {
@@ -139,9 +182,12 @@ public class LevelSnapManager : MonoBehaviour
 
         if (snapPoint != null)
         {
-            if (successAudioClip != null && audioSource != null)
+            if (englishSuccessAudioClip != null && audioSource != null)
             {
-                audioSource.PlayOneShot(successAudioClip);
+                if (!GameManager.instance.IsArabicApp())
+                    audioSource.PlayOneShot(englishSuccessAudioClip);
+                else
+                    audioSource.PlayOneShot(arabicSuccessAudioClip);
             }
 
             totalScore += 1;
@@ -159,7 +205,10 @@ public class LevelSnapManager : MonoBehaviour
 
     public void HandleFailedAnswer()
     {
-        audioSource.PlayOneShot(failedAudioClip);
+        if(!GameManager.instance.IsArabicApp())
+            audioSource.PlayOneShot(englishFailedAudioClip);
+        else
+            audioSource.PlayOneShot(arabicFailedAudioClip);
     }
 
     private void CheckLevelCompletion()
@@ -174,14 +223,58 @@ public class LevelSnapManager : MonoBehaviour
 
     IEnumerator PassTheLevel()
     {
-        yield return new WaitForSeconds(successAudioClip.length);
-        audioSource.PlayOneShot(PassAudioClip);
-        yield return new WaitForSeconds(PassAudioClip.length);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-    }
+        if (!GameManager.instance.IsArabicApp())
+            yield return new WaitForSeconds(englishSuccessAudioClip.length);
+        else
+            yield return new WaitForSeconds(arabicInstructions.length);
 
+
+        if (!GameManager.instance.IsArabicApp())
+            audioSource.PlayOneShot(englishPassAudioClip);
+        else    
+            audioSource.PlayOneShot(arabicPassAudioClip);
+
+
+        if (!GameManager.instance.IsArabicApp())
+            yield return new WaitForSeconds(englishPassAudioClip.length);
+        else
+            yield return new WaitForSeconds(arabicPassAudioClip.length);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        StartCoroutine(NextLevel());
+    }
+    [ContextMenu("Next Level")]
+    IEnumerator NextLevel()
+    {
+        Debug.Log("NextLevel");
+        nextLevelPanel.SetActive(true);
+
+        // Countdown loop
+        float remainingTime = WaitingForNextLevelPerSeconds;
+        while (remainingTime > 0)
+        {
+
+            if (!GameManager.instance.IsArabicApp())
+            {
+                nextLevelInSecondsTMP.gameObject.SetActive(true);
+                nextLevelInSecondsTMP.text = $"congratulations, you will be next level in {Mathf.CeilToInt(remainingTime)} seconds.";
+            }
+            else
+                FindObjectOfType<ArabicFixerInstractions>().ArabicFixerThreeD($"تهانينا، ستصل إلى المستوى التالي خلال  {Mathf.CeilToInt(remainingTime)} ثانية.");
+
+            yield return new WaitForSeconds(1f);
+            remainingTime -= 1f;
+        }
+
+        // Proceed to the next level
+        int count = SceneManager.sceneCountInBuildSettings;
+        if (count > SceneManager.GetActiveScene().buildIndex + 1)
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        else
+            SceneManager.LoadScene(0); // Return to main menu if all levels are finished
+    }
     void UpdateScoreUI()
     {
         ScoreTMP.text = totalScore.ToString();
+        ScreenScoreTMP.text = $@"Score: {totalScore}/{requiredScore}";
     }
 }
