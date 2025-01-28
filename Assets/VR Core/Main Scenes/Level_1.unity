@@ -15395,11 +15395,6 @@ MonoBehaviour:
   _fingerFeatureStateProvider: {fileID: 231683868}
   _shapes:
   - {fileID: 11400000, guid: 1ed4391cde522cb4bb2833bbbcc1137f, type: 2}
---- !u!1 &1228006422 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8064368420363036083, guid: 97b725027b2e5c8469cb4860d164143a, type: 3}
-  m_PrefabInstance: {fileID: 8222101144155115854}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1236058531
 GameObject:
   m_ObjectHideFlags: 0
@@ -45425,30 +45420,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1736263550072126763, guid: 97b725027b2e5c8469cb4860d164143a, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1736263550072126763, guid: 97b725027b2e5c8469cb4860d164143a, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 1736263550072126763, guid: 97b725027b2e5c8469cb4860d164143a, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1228006422}
-    - target: {fileID: 1736263550072126763, guid: 97b725027b2e5c8469cb4860d164143a, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetActive
-      objectReference: {fileID: 0}
-    - target: {fileID: 1736263550072126763, guid: 97b725027b2e5c8469cb4860d164143a, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: UnityEngine.GameObject, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 1736263550072126763, guid: 97b725027b2e5c8469cb4860d164143a, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     - target: {fileID: 6703720472002098190, guid: 97b725027b2e5c8469cb4860d164143a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -45492,10 +45463,6 @@ PrefabInstance:
     - target: {fileID: 8064368420363036083, guid: 97b725027b2e5c8469cb4860d164143a, type: 3}
       propertyPath: m_Name
       value: --- Canvas For Main Score ---
-      objectReference: {fileID: 0}
-    - target: {fileID: 8289213573763953494, guid: 97b725027b2e5c8469cb4860d164143a, type: 3}
-      propertyPath: m_AdditionalShaderChannelsFlag
-      value: 25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
