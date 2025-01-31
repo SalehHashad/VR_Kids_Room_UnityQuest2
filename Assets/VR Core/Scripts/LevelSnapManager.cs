@@ -1,4 +1,5 @@
 ﻿using ArabicSupport;
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class LevelSnapManager : MonoBehaviour
+public class LevelSnapManager : MonoBehaviourPun
 {
     [Header("Audio Settings")]
     [SerializeField] private AudioSource audioSource;
@@ -105,7 +106,8 @@ public class LevelSnapManager : MonoBehaviour
                 viewDuration = 0f;
                 break;
         }
-        UpdateScoreUI();
+        
+        photonView.RPC("UpdateScoreUI",RpcTarget.AllBuffered);
     }
 
     private void PlayGameInstractions()
@@ -171,7 +173,7 @@ public class LevelSnapManager : MonoBehaviour
         totalScore += 1;
         //snapPoint.IsMatched = true;
         onScoreUpdated?.Invoke(totalScore);
-        UpdateScoreUI();
+        photonView.RPC("UpdateScoreUI", RpcTarget.AllBuffered);
         Debug.Log("Your score is : " + totalScore);
         CheckLevelCompletion();
     }
@@ -193,7 +195,7 @@ public class LevelSnapManager : MonoBehaviour
             totalScore += 1;
             snapPoint.IsMatched = true;
             onScoreUpdated?.Invoke(totalScore);
-            UpdateScoreUI();
+            photonView.RPC("UpdateScoreUI", RpcTarget.AllBuffered);
             Debug.Log("Your score is : " + totalScore);
             CheckLevelCompletion();
         }
@@ -252,7 +254,6 @@ public class LevelSnapManager : MonoBehaviour
         float remainingTime = WaitingForNextLevelPerSeconds;
         while (remainingTime > 0)
         {
-
             if (!GameManager.instance.IsArabicApp())
             {
                 nextLevelInSecondsTMP.gameObject.SetActive(true);
@@ -265,13 +266,23 @@ public class LevelSnapManager : MonoBehaviour
             remainingTime -= 1f;
         }
 
-        // Proceed to the next level
-        int count = SceneManager.sceneCountInBuildSettings;
-        if (count > SceneManager.GetActiveScene().buildIndex + 1)
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-        else
-            SceneManager.LoadScene(0); // Return to main menu if all levels are finished
+        // Use RPC to sync scene loading
+        photonView.RPC("LoadNextLevel", RpcTarget.AllBuffered);
     }
+    [PunRPC]
+    void LoadNextLevel()
+    {
+        int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+        int totalScenes = SceneManager.sceneCountInBuildSettings;
+
+        if (nextSceneIndex >= totalScenes)
+            nextSceneIndex = 0; // Go back to main menu
+
+        PhotonNetwork.LoadLevel(nextSceneIndex);
+    }
+
+
+    [PunRPC]
     void UpdateScoreUI()
     {
         ScoreTMP.text = totalScore.ToString();
