@@ -17,10 +17,12 @@ public class LanguageGameObject : MonoBehaviour
 
     private void OnArabicSelected(PointerEvent arg0)
     {
-        GameManager.instance.SetArabic();
+        GameManager.instance.UpdateLanguage(true);
     }
     private void OnEnglishSelected(PointerEvent arg0)
     {
-        GameManager.instance.SetEnglish();
+        GameManager.instance.UpdateLanguage(false);
     }
+
+
 }

@@ -140,7 +140,8 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
         PhotonNetwork.CreateRoom(roomName, roomOptions);
         Debug.Log($"Attempting to create room: {roomName}");
-        PhotonNetwork.LoadLevel(nextGameScene);
+        //PhotonNetwork.LoadLevel(nextGameScene);
+        mainPanel.SetActive(false);
     }
 
 
@@ -164,6 +165,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
                 Debug.Log($"Joining room: {roomName}");
                 mainPanel.SetActive(false);
                 //PhotonNetwork.LoadLevel(nextGameScene);
+                mainPanel.SetActive(false);
             }
         }
         else
@@ -221,6 +223,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         Debug.Log("Joined Lobby successfully.");
+        ExecutePlatformMethod();
     }
 
     public override void OnDisconnected(DisconnectCause cause)
@@ -250,6 +253,24 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         else
         {
             Debug.LogWarning("Not currently in a lobby. Cannot list clients.");
+        }
+    }
+
+
+    private void ExecutePlatformMethod()
+    {
+        
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            Debug.Log("ExecutePlatformMethod: "+OVRPlugin.GetSystemHeadsetType().ToString());
+            mainPanel.SetActive(false);
+            CreateRoom(OVRPlugin.GetSystemHeadsetType().ToString(), 2, "");
+        }
+        else
+        {
+            Debug.Log("ExecutePlatformMethod: "+OVRPlugin.GetSystemHeadsetType().ToString());
+            Debug.Log("Application.platform: " + Application.platform.ToString());
+
         }
     }
 }

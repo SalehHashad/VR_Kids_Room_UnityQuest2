@@ -1,9 +1,10 @@
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public enum Language { Arabic, English }
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviourPun
 {
     public static GameManager instance { get; private set; }
 
@@ -32,23 +33,32 @@ public class GameManager : MonoBehaviour
     }
 
     public bool IsArabicApp() => language == Language.Arabic;
-
+    public void UpdateLanguage(bool isArabic)
+    {
+        if (isArabic)
+            photonView.RPC("SetArabic", RpcTarget.AllBuffered);
+        else
+            photonView.RPC("SetEnglish", RpcTarget.AllBuffered);
+    }
+    [PunRPC]
     public void SetArabic()
     {
         language = Language.Arabic;
         Debug.Log("Language set to Arabic.");
-        LoadNextScene();
+        photonView.RPC("LoadNextScene", RpcTarget.AllBuffered, SceneManager.GetActiveScene().buildIndex + 1);
     }
-
+    [PunRPC]
     public void SetEnglish()
     {
         language = Language.English;
         Debug.Log("Language set to English.");
-        LoadNextScene();
+
+        photonView.RPC("LoadNextScene", RpcTarget.AllBuffered, SceneManager.GetActiveScene().buildIndex+1);
     }
 
-    void LoadNextScene()
+    [PunRPC]
+    void LoadNextScene(int sceneIndex)
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene(sceneIndex);
     }
 }

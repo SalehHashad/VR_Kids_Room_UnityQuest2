@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.InputSystem.iOS;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -107,7 +106,7 @@ public class LevelSnapManager : MonoBehaviourPun
                 break;
         }
         
-        photonView.RPC("UpdateScoreUI",RpcTarget.AllBuffered);
+        photonView.RPC("UpdateScoreUI",RpcTarget.AllBuffered, totalScore);
     }
 
     private void PlayGameInstractions()
@@ -173,7 +172,7 @@ public class LevelSnapManager : MonoBehaviourPun
         totalScore += 1;
         //snapPoint.IsMatched = true;
         onScoreUpdated?.Invoke(totalScore);
-        photonView.RPC("UpdateScoreUI", RpcTarget.AllBuffered);
+        photonView.RPC("UpdateScoreUI", RpcTarget.AllBuffered, totalScore);
         Debug.Log("Your score is : " + totalScore);
         CheckLevelCompletion();
     }
@@ -195,9 +194,8 @@ public class LevelSnapManager : MonoBehaviourPun
             totalScore += 1;
             snapPoint.IsMatched = true;
             onScoreUpdated?.Invoke(totalScore);
-            photonView.RPC("UpdateScoreUI", RpcTarget.AllBuffered);
+            photonView.RPC("UpdateScoreUI", RpcTarget.AllBuffered, totalScore);
             Debug.Log("Your score is : " + totalScore);
-            CheckLevelCompletion();
         }
         else
         {
@@ -283,9 +281,12 @@ public class LevelSnapManager : MonoBehaviourPun
 
 
     [PunRPC]
-    void UpdateScoreUI()
+    void UpdateScoreUI(int totalScore)
     {
+
         ScoreTMP.text = totalScore.ToString();
         ScreenScoreTMP.text = $@"Score: {totalScore}/{requiredScore}";
+        Debug.Log("RPC TEST");
+        CheckLevelCompletion();
     }
 }
