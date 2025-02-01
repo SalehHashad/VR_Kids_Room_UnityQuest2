@@ -259,16 +259,16 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     private void ExecutePlatformMethod()
     {
-        
+        mainPanel.SetActive(false);
+        CreateRoom(SystemInfo.deviceUniqueIdentifier, 2, "");
         if (Application.platform == RuntimePlatform.Android)
         {
-            Debug.Log("ExecutePlatformMethod: "+OVRPlugin.GetSystemHeadsetType().ToString());
-            mainPanel.SetActive(false);
-            CreateRoom(OVRPlugin.GetSystemHeadsetType().ToString(), 2, "");
+            Debug.Log("ExecutePlatformMethod: "+ SystemInfo.deviceUniqueIdentifier);
+
         }
         else
         {
-            Debug.Log("ExecutePlatformMethod: "+OVRPlugin.GetSystemHeadsetType().ToString());
+            Debug.Log("ExecutePlatformMethod: "+SystemInfo.deviceUniqueIdentifier);
             Debug.Log("Application.platform: " + Application.platform.ToString());
 
         }

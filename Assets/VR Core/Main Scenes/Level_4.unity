@@ -4008,7 +4008,7 @@ MonoBehaviour:
   _maxInteractors: -1
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 1022627591}
   _snapPoseDelegate: {fileID: 0}
   _movementProvider: {fileID: 0}
   expectedObjectTag: Prop_notebook
@@ -4890,7 +4890,7 @@ MonoBehaviour:
   _maxInteractors: -1
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 831434741}
   _snapPoseDelegate: {fileID: 0}
   _movementProvider: {fileID: 0}
   expectedObjectTag: Umberlla_Stand
@@ -5284,7 +5284,7 @@ MonoBehaviour:
   _maxInteractors: -1
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 1427809347}
   _snapPoseDelegate: {fileID: 0}
   _movementProvider: {fileID: 0}
   expectedObjectTag: Bag
@@ -5806,7 +5806,7 @@ MonoBehaviour:
   _maxInteractors: -1
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 87536241}
   _snapPoseDelegate: {fileID: 0}
   _movementProvider: {fileID: 0}
   expectedObjectTag: Prop_bag
@@ -10069,7 +10069,7 @@ MonoBehaviour:
   _maxInteractors: -1
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 887264487}
   _snapPoseDelegate: {fileID: 0}
   _movementProvider: {fileID: 0}
   expectedObjectTag: BedTableLamp
@@ -11972,7 +11972,7 @@ MonoBehaviour:
   _maxInteractors: -1
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 590144296}
   _snapPoseDelegate: {fileID: 0}
   _movementProvider: {fileID: 0}
   expectedObjectTag: Cap
@@ -19511,7 +19511,7 @@ MonoBehaviour:
   _maxInteractors: -1
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 207391164}
   _snapPoseDelegate: {fileID: 0}
   _movementProvider: {fileID: 0}
   expectedObjectTag: Prop_book_Open
@@ -20494,7 +20494,7 @@ MonoBehaviour:
   _maxInteractors: -1
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 822299919}
   _snapPoseDelegate: {fileID: 0}
   _movementProvider: {fileID: 0}
   expectedObjectTag: Prop_globe
@@ -29316,7 +29316,7 @@ MonoBehaviour:
   _maxInteractors: -1
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 1907838454}
   _snapPoseDelegate: {fileID: 0}
   _movementProvider: {fileID: 0}
   expectedObjectTag: Prop_record player
@@ -30477,7 +30477,7 @@ MonoBehaviour:
   _maxInteractors: -1
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 1803255816}
   _snapPoseDelegate: {fileID: 0}
   _movementProvider: {fileID: 0}
   expectedObjectTag: Prop_trashcan
@@ -32901,7 +32901,7 @@ MonoBehaviour:
   _maxInteractors: -1
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 559646704}
   _snapPoseDelegate: {fileID: 0}
   _movementProvider: {fileID: 0}
   expectedObjectTag: Prop_frame_1
@@ -33147,7 +33147,7 @@ MonoBehaviour:
   _maxInteractors: -1
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 37029963}
   _snapPoseDelegate: {fileID: 0}
   _movementProvider: {fileID: 0}
   expectedObjectTag: Chair_1
@@ -33237,7 +33237,7 @@ MonoBehaviour:
   _maxInteractors: -1
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 1242864334}
   _snapPoseDelegate: {fileID: 0}
   _movementProvider: {fileID: 0}
   expectedObjectTag: Prop_headphones
@@ -35850,7 +35850,7 @@ MonoBehaviour:
   _maxInteractors: -1
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 576007728}
   _snapPoseDelegate: {fileID: 0}
   _movementProvider: {fileID: 0}
   expectedObjectTag: Open_book_full
@@ -36905,7 +36905,7 @@ MonoBehaviour:
   _maxInteractors: -1
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 300636310}
   _snapPoseDelegate: {fileID: 0}
   _movementProvider: {fileID: 0}
   expectedObjectTag: Umberlla
@@ -42203,7 +42203,7 @@ MonoBehaviour:
   _maxInteractors: -1
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 407607183}
   _snapPoseDelegate: {fileID: 0}
   _movementProvider: {fileID: 0}
   expectedObjectTag: Prop_frame_2
@@ -47678,7 +47678,7 @@ MonoBehaviour:
   _maxInteractors: -1
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 1799871344}
   _snapPoseDelegate: {fileID: 0}
   _movementProvider: {fileID: 0}
   expectedObjectTag: Prop_CD1
@@ -55320,7 +55320,7 @@ MonoBehaviour:
   _maxInteractors: -1
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 1155686631}
   _snapPoseDelegate: {fileID: 0}
   _movementProvider: {fileID: 0}
   expectedObjectTag: Chair
@@ -56193,7 +56193,7 @@ MonoBehaviour:
   _maxInteractors: -1
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 812929465}
   _snapPoseDelegate: {fileID: 0}
   _movementProvider: {fileID: 0}
   expectedObjectTag: Prop_book
@@ -58511,7 +58511,7 @@ MonoBehaviour:
   _maxInteractors: -1
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 1648505827}
   _snapPoseDelegate: {fileID: 0}
   _movementProvider: {fileID: 0}
   expectedObjectTag: Clock
@@ -58925,7 +58925,7 @@ MonoBehaviour:
   _maxInteractors: -1
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 204563130}
   _snapPoseDelegate: {fileID: 0}
   _movementProvider: {fileID: 0}
   expectedObjectTag: Prop_CD2
@@ -63300,7 +63300,8 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 571845278210099400}
   sceneViewId: 23
   InstantiationId: 0
   isRuntimeInstantiated: 0
