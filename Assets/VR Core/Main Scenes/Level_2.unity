@@ -18976,6 +18976,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: WorldSpace Canvas for Player Image View
       objectReference: {fileID: 0}
+    - target: {fileID: 2052484682003300907, guid: 8f8b417c7831a24449e1bfed767789bd, type: 3}
+      propertyPath: sceneViewId
+      value: 23
+      objectReference: {fileID: 0}
     - target: {fileID: 2607570775582277013, guid: 8f8b417c7831a24449e1bfed767789bd, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -27559,7 +27563,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1746501776
 MonoBehaviour:
   m_ObjectHideFlags: 0
