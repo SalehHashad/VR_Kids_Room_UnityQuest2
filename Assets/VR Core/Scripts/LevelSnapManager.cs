@@ -71,7 +71,9 @@ public class LevelSnapManager : MonoBehaviourPun
         };
 
         if (currentLevel == 1) PlayGameInstructions();
-        photonView.RPC("UpdateScoreUI", RpcTarget.AllBuffered, totalScore);
+
+        if (PhotonNetwork.IsMasterClient)
+            photonView.RPC("UpdateScoreUI", RpcTarget.All, totalScore);
     }
 
     private void PlayGameInstructions()
@@ -112,7 +114,8 @@ public class LevelSnapManager : MonoBehaviourPun
 
     public void HandleCorrectSnap(string objectTag)
     {
-        photonView.RPC("CorrectAnswer", RpcTarget.Others, objectTag);
+        if (PhotonNetwork.IsMasterClient)
+            photonView.RPC("CorrectAnswer", RpcTarget.All, objectTag);
     }
 
     [PunRPC]
@@ -126,10 +129,11 @@ public class LevelSnapManager : MonoBehaviourPun
         }
 
         PlayAudio(GameManager.instance.IsArabicApp() ? arabicSuccessAudioClip : englishSuccessAudioClip);
-        totalScore++;
+        totalScore += 1;
         snapPoint.IsMatched = true;
         onScoreUpdated?.Invoke(totalScore);
-        photonView.RPC("UpdateScoreUI", RpcTarget.AllBuffered, totalScore);
+        if (PhotonNetwork.IsMasterClient)
+            photonView.RPC("UpdateScoreUI", RpcTarget.All, totalScore);
     }
 
     public void HandleFailedAnswer()
@@ -165,12 +169,14 @@ public class LevelSnapManager : MonoBehaviourPun
         nextLevelPanel.SetActive(true);
         for (float remainingTime = waitingForNextLevelSeconds; remainingTime > 0; remainingTime--)
         {
-            nextLevelInSecondsTMP.text = GameManager.instance.IsArabicApp()
-                ? $"تهانينا، ستصل إلى المستوى التالي خلال {Mathf.CeilToInt(remainingTime)} ثانية."
-                : $"Congratulations, you will be next level in {Mathf.CeilToInt(remainingTime)} seconds.";
+            if (GameManager.instance.IsArabicApp())
+                FindObjectOfType<ArabicFixerInstractions>().ArabicFixerThreeD($"تهانينا، ستصل إلى المستوى التالي خلال  {Mathf.CeilToInt(remainingTime)} ثانية.");
+            else
+                nextLevelInSecondsTMP.text = $"Congratulations, you will be next level in {Mathf.CeilToInt(remainingTime)} seconds.";
             yield return new WaitForSeconds(1f);
         }
-        photonView.RPC("LoadNextLevel", RpcTarget.AllBuffered);
+        if (PhotonNetwork.IsMasterClient)
+            photonView.RPC("LoadNextLevel", RpcTarget.All);
     }
 
     [PunRPC]
@@ -183,10 +189,11 @@ public class LevelSnapManager : MonoBehaviourPun
     }
 
     [PunRPC]
-    private void UpdateScoreUI(int score)
+    private void UpdateScoreUI(int _totalScore)
     {
-        scoreTMP.text = score.ToString();
-        screenScoreTMP.text = $"Score: {score}/{requiredScore}";
+        totalScore = _totalScore;
+        scoreTMP.text = _totalScore.ToString();
+        screenScoreTMP.text = $"Score: {_totalScore}/{requiredScore}";
         CheckLevelCompletion();
     }
 }
