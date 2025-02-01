@@ -1,6 +1,5 @@
 ﻿using ArabicSupport;
 using Photon.Pun;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -14,26 +13,21 @@ public class LevelSnapManager : MonoBehaviourPun
 {
     [Header("Audio Settings")]
     [SerializeField] private AudioSource audioSource;
-    [SerializeField] private AudioClip englishSuccessAudioClip;
-    [SerializeField] private AudioClip arabicSuccessAudioClip;
-    [SerializeField] private AudioClip englishFailedAudioClip;
-    [SerializeField] private AudioClip arabicFailedAudioClip;
-    [SerializeField] private AudioClip englishPassAudioClip;
-    [SerializeField] private AudioClip arabicPassAudioClip;
-    [SerializeField] private AudioClip englishInstructions;
-    [SerializeField] private AudioClip arabicInstructions;
+    [SerializeField] private AudioClip englishSuccessAudioClip, arabicSuccessAudioClip;
+    [SerializeField] private AudioClip englishFailedAudioClip, arabicFailedAudioClip;
+    [SerializeField] private AudioClip englishPassAudioClip, arabicPassAudioClip;
+    [SerializeField] private AudioClip englishInstructions, arabicInstructions;
 
     [Header("Score Settings")]
     [SerializeField] private int totalScore = 0;
     [SerializeField] private int requiredScore = 0;
-    [SerializeField] private TextMeshProUGUI ScoreTMP;
-    [SerializeField] private TextMeshProUGUI ScreenScoreTMP;
-    [SerializeField] List<ModelsData> modelsData = new List<ModelsData>();
+    [SerializeField] private TextMeshProUGUI scoreTMP, screenScoreTMP;
+    [SerializeField] private List<ModelsData> modelsData = new();
 
     [Header("Image View Settings")]
     [SerializeField] private Image referenceImage;
     [SerializeField] private TextMeshProUGUI viewsRemainingText;
-    public int remainingViews;
+    [SerializeField] private int remainingViews;
     private float viewDuration;
     private bool isImageVisible = false;
     private Coroutine hideImageCoroutine;
@@ -41,19 +35,21 @@ public class LevelSnapManager : MonoBehaviourPun
     private ShowImage_Tag showImage;
     private ScoreButton_Tag showScoreButton;
 
-    [Space]
     [Header("Next Level")]
-    public int WaitingForNextLevelPerSeconds = 5;
-    public GameObject nextLevelPanel;
-    public TextMeshProUGUI nextLevelInSecondsTMP;
-    [Space]
+    [SerializeField] private int waitingForNextLevelSeconds = 5;
+    [SerializeField] private GameObject nextLevelPanel;
+    [SerializeField] private TextMeshProUGUI nextLevelInSecondsTMP;
+
     public UnityEvent onLevelComplete;
     public UnityEvent<int> onScoreUpdated;
 
+    private void Awake() => InitializeObjects();
 
-    private void Awake()
+    private void Start()
     {
-        InitializeObjects();
+        InitializeLevelSettings();
+        referenceImage?.gameObject.SetActive(false);
+        UpdateViewsText();
     }
 
     private void InitializeObjects()
@@ -61,232 +57,136 @@ public class LevelSnapManager : MonoBehaviourPun
         showImage = FindObjectOfType<ShowImage_Tag>(true);
         showScoreButton = FindObjectOfType<ScoreButton_Tag>(true);
     }
-    private void Start()
-    {
-        InitializeLevelSettings();
-        ScoreTMP.text = totalScore.ToString();
 
-        if (referenceImage != null)
-        {
-            referenceImage.gameObject.SetActive(false);
-        }
-        UpdateViewsText();
-    }
     private void InitializeLevelSettings()
     {
         int currentLevel = SceneManager.GetActiveScene().buildIndex;
-        switch (currentLevel)
+        (requiredScore, remainingViews, viewDuration) = currentLevel switch
         {
-            case 1:
-                PlayGameInstractions();
-                requiredScore = 6;
-                remainingViews = 4;
-                viewDuration = 10f;
-                break;
-            case 2:
-                // here you can also add the audio intro for theis level like "This is level two you need to grab 24 object and so on ..."
-                requiredScore = 18;
-                remainingViews = 3;
-                viewDuration = 8f;
-                break;
-            case 3:
-                requiredScore = 27;
-                remainingViews = 2;
-                viewDuration = 6f;
-                break;
-            case 4:
-                requiredScore = 51;
-                remainingViews = 1;
-                viewDuration = 5f;
-                break;
-            default:
-                requiredScore = 0;
-                remainingViews = 0;
-                viewDuration = 0f;
-                break;
-        }
-        
-        photonView.RPC("UpdateScoreUI",RpcTarget.AllBuffered, totalScore);
+            1 => (6, 4, 10f),
+            2 => (18, 3, 8f),
+            3 => (27, 2, 6f),
+            4 => (51, 1, 5f),
+            _ => (0, 0, 0f)
+        };
+
+        if (currentLevel == 1) PlayGameInstructions();
+        photonView.RPC("UpdateScoreUI", RpcTarget.AllBuffered, totalScore);
     }
 
-    private void PlayGameInstractions()
+    private void PlayGameInstructions()
     {
-        if (GameManager.instance.IsArabicApp())
-            audioSource.clip = arabicInstructions;
-        else
-            audioSource.clip = englishInstructions;
+        audioSource.clip = GameManager.instance.IsArabicApp() ? arabicInstructions : englishInstructions;
         audioSource.Play();
     }
 
     public void ShowReferenceImage()
     {
-        if (remainingViews > 0 && !isImageVisible && referenceImage != null)
-        {
-            showImage.gameObject.SetActive(false);
-            showScoreButton.gameObject.SetActive(false);
-            isImageVisible = true;
-            remainingViews--;
-            UpdateViewsText();
+        if (remainingViews <= 0 || isImageVisible || referenceImage == null) return;
 
-            referenceImage.gameObject.SetActive(true);
+        showImage.gameObject.SetActive(false);
+        showScoreButton.gameObject.SetActive(false);
+        isImageVisible = true;
+        remainingViews--;
+        UpdateViewsText();
 
-            if (hideImageCoroutine != null)
-            {
-                StopCoroutine(hideImageCoroutine);
-            }
-
-            hideImageCoroutine = StartCoroutine(HideImageAfterDelay());
-        }
+        referenceImage.gameObject.SetActive(true);
+        if (hideImageCoroutine != null) StopCoroutine(hideImageCoroutine);
+        hideImageCoroutine = StartCoroutine(HideImageAfterDelay());
     }
 
     private IEnumerator HideImageAfterDelay()
     {
         yield return new WaitForSeconds(viewDuration);
-        if (referenceImage != null)
-        {
-            referenceImage.gameObject.SetActive(false);
-            showImage.gameObject.SetActive(true);
-            showScoreButton.gameObject.SetActive(true);
-        }
+        referenceImage.gameObject.SetActive(false);
+        showImage.gameObject.SetActive(true);
+        showScoreButton.gameObject.SetActive(true);
         isImageVisible = false;
     }
 
     private void UpdateViewsText()
     {
-        if (viewsRemainingText != null)
-        {
+        if (viewsRemainingText)
             viewsRemainingText.text = $"Remaining Views: {remainingViews}";
-        }
-    }
-    [ContextMenu("Make Correct Answer")]
-    public void testCorrctAnswer()
-    {
-        if (englishSuccessAudioClip != null && audioSource != null)
-        {
-            if(!GameManager.instance.IsArabicApp())
-                audioSource.PlayOneShot(englishSuccessAudioClip);
-            else
-                audioSource.PlayOneShot(arabicSuccessAudioClip);
-        }
-
-        totalScore += 1;
-        //snapPoint.IsMatched = true;
-        onScoreUpdated?.Invoke(totalScore);
-        photonView.RPC("UpdateScoreUI", RpcTarget.AllBuffered, totalScore);
-        Debug.Log("Your score is : " + totalScore);
-        CheckLevelCompletion();
     }
 
     public void HandleCorrectSnap(string objectTag)
     {
+        photonView.RPC("CorrectAnswer", RpcTarget.Others, objectTag);
+    }
+
+    [PunRPC]
+    private void CorrectAnswer(string objectTag)
+    {
         var snapPoint = modelsData.Find(sp => sp.ObjetcTag == objectTag && !sp.IsMatched);
-
-        if (snapPoint != null)
+        if (snapPoint == null)
         {
-            if (englishSuccessAudioClip != null && audioSource != null)
-            {
-                if (!GameManager.instance.IsArabicApp())
-                    audioSource.PlayOneShot(englishSuccessAudioClip);
-                else
-                    audioSource.PlayOneShot(arabicSuccessAudioClip);
-            }
+            Debug.Log($"No matching snap point found for object tag: {objectTag}");
+            return;
+        }
 
-            totalScore += 1;
-            snapPoint.IsMatched = true;
-            onScoreUpdated?.Invoke(totalScore);
-            photonView.RPC("UpdateScoreUI", RpcTarget.AllBuffered, totalScore);
-            Debug.Log("Your score is : " + totalScore);
-        }
-        else
-        {
-            Debug.Log("No matching snap point found for object tag: " + objectTag);
-        }
+        PlayAudio(GameManager.instance.IsArabicApp() ? arabicSuccessAudioClip : englishSuccessAudioClip);
+        totalScore++;
+        snapPoint.IsMatched = true;
+        onScoreUpdated?.Invoke(totalScore);
+        photonView.RPC("UpdateScoreUI", RpcTarget.AllBuffered, totalScore);
     }
 
     public void HandleFailedAnswer()
     {
-        if(!GameManager.instance.IsArabicApp())
-            audioSource.PlayOneShot(englishFailedAudioClip);
-        else
-            audioSource.PlayOneShot(arabicFailedAudioClip);
+        PlayAudio(GameManager.instance.IsArabicApp() ? arabicFailedAudioClip : englishFailedAudioClip);
     }
 
     private void CheckLevelCompletion()
     {
-        if (totalScore >= requiredScore)
-        {
-            onLevelComplete?.Invoke();
-            Debug.Log("You have pass this level ");
-            StartCoroutine(PassTheLevel());
-        }
+        if (totalScore < requiredScore) return;
+        onLevelComplete?.Invoke();
+        StartCoroutine(PassTheLevel());
     }
 
-    IEnumerator PassTheLevel()
+    private IEnumerator PassTheLevel()
     {
-        if (!GameManager.instance.IsArabicApp())
-            yield return new WaitForSeconds(englishSuccessAudioClip.length);
-        else
-            yield return new WaitForSeconds(arabicInstructions.length);
-
-
-        if (!GameManager.instance.IsArabicApp())
-            audioSource.PlayOneShot(englishPassAudioClip);
-        else    
-            audioSource.PlayOneShot(arabicPassAudioClip);
-
-
-        if (!GameManager.instance.IsArabicApp())
-            yield return new WaitForSeconds(englishPassAudioClip.length);
-        else
-            yield return new WaitForSeconds(arabicPassAudioClip.length);
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        yield return new WaitForSeconds(GetAudioClipLength(GameManager.instance.IsArabicApp() ? arabicInstructions : englishSuccessAudioClip));
+        PlayAudio(GameManager.instance.IsArabicApp() ? arabicPassAudioClip : englishPassAudioClip);
+        yield return new WaitForSeconds(GetAudioClipLength(GameManager.instance.IsArabicApp() ? arabicPassAudioClip : englishPassAudioClip));
         StartCoroutine(NextLevel());
     }
-    [ContextMenu("Next Level")]
-    IEnumerator NextLevel()
+
+    private float GetAudioClipLength(AudioClip clip) => clip ? clip.length : 0;
+
+    private void PlayAudio(AudioClip clip)
     {
-        Debug.Log("NextLevel");
+        if (clip != null && audioSource != null)
+            audioSource.PlayOneShot(clip);
+    }
+
+    private IEnumerator NextLevel()
+    {
         nextLevelPanel.SetActive(true);
-
-        // Countdown loop
-        float remainingTime = WaitingForNextLevelPerSeconds;
-        while (remainingTime > 0)
+        for (float remainingTime = waitingForNextLevelSeconds; remainingTime > 0; remainingTime--)
         {
-            if (!GameManager.instance.IsArabicApp())
-            {
-                nextLevelInSecondsTMP.gameObject.SetActive(true);
-                nextLevelInSecondsTMP.text = $"congratulations, you will be next level in {Mathf.CeilToInt(remainingTime)} seconds.";
-            }
-            else
-                FindObjectOfType<ArabicFixerInstractions>().ArabicFixerThreeD($"تهانينا، ستصل إلى المستوى التالي خلال  {Mathf.CeilToInt(remainingTime)} ثانية.");
-
+            nextLevelInSecondsTMP.text = GameManager.instance.IsArabicApp()
+                ? $"تهانينا، ستصل إلى المستوى التالي خلال {Mathf.CeilToInt(remainingTime)} ثانية."
+                : $"Congratulations, you will be next level in {Mathf.CeilToInt(remainingTime)} seconds.";
             yield return new WaitForSeconds(1f);
-            remainingTime -= 1f;
         }
-
-        // Use RPC to sync scene loading
         photonView.RPC("LoadNextLevel", RpcTarget.AllBuffered);
     }
+
     [PunRPC]
-    void LoadNextLevel()
+    private void LoadNextLevel()
     {
         int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
-        int totalScenes = SceneManager.sceneCountInBuildSettings;
-
-        if (nextSceneIndex >= totalScenes)
-            nextSceneIndex = 0; // Go back to main menu
-
+        if (nextSceneIndex >= SceneManager.sceneCountInBuildSettings)
+            nextSceneIndex = 0; // Restart to main menu
         PhotonNetwork.LoadLevel(nextSceneIndex);
     }
 
-
     [PunRPC]
-    void UpdateScoreUI(int totalScore)
+    private void UpdateScoreUI(int score)
     {
-
-        ScoreTMP.text = totalScore.ToString();
-        ScreenScoreTMP.text = $@"Score: {totalScore}/{requiredScore}";
-        Debug.Log("RPC TEST");
+        scoreTMP.text = score.ToString();
+        screenScoreTMP.text = $"Score: {score}/{requiredScore}";
         CheckLevelCompletion();
     }
 }
