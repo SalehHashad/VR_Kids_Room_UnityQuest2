@@ -59369,8 +59369,8 @@ MonoBehaviour:
   arabicInstructions: {fileID: 8300000, guid: 8809e35a04e87f54aae821fbe1525561, type: 3}
   totalScore: 0
   requiredScore: 0
-  ScoreTMP: {fileID: 2125866638}
-  ScreenScoreTMP: {fileID: 522160828}
+  scoreTMP: {fileID: 2125866638}
+  screenScoreTMP: {fileID: 522160828}
   modelsData:
   - ObjetcTag: Prop_bag
     IsMatched: 0
@@ -59477,7 +59477,7 @@ MonoBehaviour:
   referenceImage: {fileID: 2096409413}
   viewsRemainingText: {fileID: 0}
   remainingViews: 0
-  WaitingForNextLevelPerSeconds: 5
+  waitingForNextLevelSeconds: 5
   nextLevelPanel: {fileID: 520593701}
   nextLevelInSecondsTMP: {fileID: 520593699}
   onLevelComplete:
