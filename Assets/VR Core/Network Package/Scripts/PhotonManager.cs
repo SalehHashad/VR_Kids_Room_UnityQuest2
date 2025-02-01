@@ -259,12 +259,12 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     private void ExecutePlatformMethod()
     {
-        
+        mainPanel.SetActive(false);
+        CreateRoom(SystemInfo.deviceUniqueIdentifier, 2, "");
         if (Application.platform == RuntimePlatform.Android)
         {
             Debug.Log("ExecutePlatformMethod: "+ SystemInfo.deviceUniqueIdentifier);
-            mainPanel.SetActive(false);
-            CreateRoom(SystemInfo.deviceUniqueIdentifier, 2, "");
+
         }
         else
         {
