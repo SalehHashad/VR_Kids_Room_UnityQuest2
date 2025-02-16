@@ -172,19 +172,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4327356413144049303, guid: d2d6fa97ea9d0f84784ba55ef26b83a6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.96
+      value: -0.91
       objectReference: {fileID: 0}
     - target: {fileID: 4327356413144049303, guid: d2d6fa97ea9d0f84784ba55ef26b83a6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.422
+      value: 0.481
       objectReference: {fileID: 0}
     - target: {fileID: 4327356413144049303, guid: d2d6fa97ea9d0f84784ba55ef26b83a6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.566
+      value: 1.913
       objectReference: {fileID: 0}
     - target: {fileID: 4327356413144049303, guid: d2d6fa97ea9d0f84784ba55ef26b83a6, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.37531385
+      value: -0.18619365
       objectReference: {fileID: 0}
     - target: {fileID: 4327356413144049303, guid: d2d6fa97ea9d0f84784ba55ef26b83a6, type: 3}
       propertyPath: m_LocalRotation.x
@@ -192,7 +192,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4327356413144049303, guid: d2d6fa97ea9d0f84784ba55ef26b83a6, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.9268979
+      value: 0.9825131
       objectReference: {fileID: 0}
     - target: {fileID: 4327356413144049303, guid: d2d6fa97ea9d0f84784ba55ef26b83a6, type: 3}
       propertyPath: m_LocalRotation.z
@@ -204,7 +204,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4327356413144049303, guid: d2d6fa97ea9d0f84784ba55ef26b83a6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 201.461
       objectReference: {fileID: 0}
     - target: {fileID: 4327356413144049303, guid: d2d6fa97ea9d0f84784ba55ef26b83a6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -18976,6 +18976,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: WorldSpace Canvas for Player Image View
       objectReference: {fileID: 0}
+    - target: {fileID: 2052484682003300907, guid: 8f8b417c7831a24449e1bfed767789bd, type: 3}
+      propertyPath: sceneViewId
+      value: 23
+      objectReference: {fileID: 0}
     - target: {fileID: 2607570775582277013, guid: 8f8b417c7831a24449e1bfed767789bd, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -20210,7 +20214,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 65
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1244151192
 Transform:
   m_ObjectHideFlags: 0
@@ -38981,7 +38985,7 @@ Transform:
   m_GameObject: {fileID: 735257258421299409}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.82, y: 0, z: 1.849}
+  m_LocalPosition: {x: -0.888, y: 0, z: 1.934}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
